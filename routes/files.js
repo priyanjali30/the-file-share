@@ -6,7 +6,7 @@ const File = require("../models/file");
 const { v4: uuidv4 } = require("uuid");
 
 let storage = multer.diskStorage({
-	destination: (req, file, cb) => cb(null, "uploads"),
+	destination: (req, file, cb) => cb(null, "uploads/"),
 	filename: (req, file, cb) => {
 		const uniqueName = `${Date.now()}-${Math.round(
 			Math.random() * 1e9
@@ -67,7 +67,7 @@ router.post("/send", async (req, res) => {
 		text: `${emailFrom} shared a file with you.`,
 		html: require("../services/emailTemplate")({
 			emailFrom: emailFrom,
-			downloadLink: `${process.env.APP_BASE_URL}files/${file.uuid}`,
+			downloadLink: `${process.env.APP_BASE_URL}/files${file.uuid}`,
 			size: parseInt(file.size / 1000) + "KB",
 			expires: "24 Hours",
 		}),
